@@ -1,22 +1,26 @@
 FROM node:18-alpine
 
-# Install n8n globally
-RUN npm install -g n8n
-
-# Create app directory
+# Set working directory
 WORKDIR /app
 
-# Copy package files if you have them
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies (if any)
+# Install dependencies
 RUN npm install
 
-# Copy app source
+# Create n8n directory
+RUN mkdir -p /home/node/.n8n
+
+# Copy any additional files
 COPY . .
 
 # Expose port
 EXPOSE 5678
 
+# Set environment variables
+ENV N8N_HOST=0.0.0.0
+ENV N8N_PORT=5678
+
 # Start n8n
-CMD ["n8n", "start"]
+CMD ["npm", "start"]
